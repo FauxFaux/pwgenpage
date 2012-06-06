@@ -8,7 +8,10 @@
 	<script type="text/javascript" src="pwgen.js"></script>
 	<script type="text/javascript" src="gpw.js"></script>
 	<style type="text/css">
-		body { font-family: Consolas, monospace; }
+		body {
+			font-family: Consolas, monospace;
+			font-size: 150%
+		}
 	</style>
 </head>
 <body>
@@ -18,15 +21,25 @@
 	<span id="p"></span>
 	<noscript>This website is entirely implemented in Javascript, sorry.</noscript>
 	<script type="text/javascript">
+		var len = 16;
 		var pwgen = new PWGen();
-		pwgen.maxLength = 16;
+		pwgen.maxLength = len;
 		pwgen.includeCapitalLetter = true;
 		pwgen.includeNumber = true;
+		var p = document.getElementById('p');
 		function refresh() {
 			var s = '';
-			for (var i = 0; i < 1500; ++i)
-				s += (Math.random() < .2 ? pwgen.generate() : GPW.pronounceable(16)) + ' ';
-			document.getElementById('p').innerHTML = s;
+			while (p.childNodes.length > 0)
+				p.removeChild(p.lastChild);
+
+			for (var i = 0; i < 500; ++i) {
+				var g = Math.random() < .3 ? pwgen.generate() : GPW.pronounceable(len);
+				if (g.length != len)
+					continue; // sigh
+				var e = document.createElement('span');
+				e.innerHTML = g + ' ';
+				p.appendChild(e);
+			}
 		}
 		refresh();
 	</script>
