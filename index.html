@@ -1,0 +1,34 @@
+<html>
+<head>
+	<title>pwgen</title>
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js"></script>
+	<script type="text/javascript">
+		typeof Class == 'undefined' || document.write(unescape("%3Cscript type='text/javascript' src='prototype.js'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript" src="pwgen.js"></script>
+	<script type="text/javascript" src="gpw.js"></script>
+	<style type="text/css">
+		body { font-family: Consolas, monospace; }
+	</style>
+</head>
+<body>
+	<input type="button" onclick="void refresh()" value="more"></button>
+	<a href="http://8-p.info/pwgen/">original pwgen</a>
+	<a href="http://www.multicians.org/thvv/gpw-js.html">original gpw</a>
+	<span id="p"></span>
+	<noscript>This website is entirely implemented in Javascript, sorry.</noscript>
+	<script type="text/javascript">
+		var pwgen = new PWGen();
+		pwgen.maxLength = 16;
+		pwgen.includeCapitalLetter = true;
+		pwgen.includeNumber = true;
+		function refresh() {
+			var s = '';
+			for (var i = 0; i < 1500; ++i)
+				s += (Math.random() < .2 ? pwgen.generate() : GPW.pronounceable(16)) + ' ';
+			document.getElementById('p').innerHTML = s;
+		}
+		refresh();
+	</script>
+</body>
+</html>
