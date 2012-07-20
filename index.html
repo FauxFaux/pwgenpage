@@ -7,6 +7,7 @@
 	</script>
 	<script type="text/javascript" src="pwgen.js"></script>
 	<script type="text/javascript" src="gpw.js"></script>
+	<script type="text/javascript" src="sjcl.js"></script>
 	<style type="text/css">
 		body {
 			font-family: Consolas, monospace;
@@ -23,24 +24,38 @@
 	<span id="p"></span>
 	<noscript>This website is entirely implemented in Javascript, sorry.</noscript>
 	<script type="text/javascript">
+		sjcl.random.startCollectors();
+		sjcl.random.setDefaultParanoia(0);
+		function rand() {
+			return Math.abs(sjcl.random.randomWords(1)[0]) / (Math.pow(2,31) - 1);
+		}
+
 		var len = 16;
 		var pwgen = new PWGen();
 		pwgen.maxLength = len;
 		pwgen.includeCapitalLetter = true;
 		pwgen.includeNumber = true;
+		pwgen.rand = rand;
 		var p = document.getElementById('p');
+
 		function refresh() {
 			var s = '';
 			while (p.childNodes.length > 0)
 				p.removeChild(p.lastChild);
 
-			for (var i = 0; i < 500; ++i) {
-				var g = Math.random() < .3 ? pwgen.generate() : GPW.pronounceable(len);
-				if (g.length != len)
-					continue; // sigh
+			function dump(g) {
 				var e = document.createElement('span');
 				e.innerHTML = g + ' ';
 				p.appendChild(e);
+			}
+
+			dump("security: " + Math.round(sjcl.random.getProgress(6) * 100) + "% (<b>click</b> more for more)");
+
+			for (var i = 0; i < 500; ++i) {
+				var g = rand() < .3 ? pwgen.generate() : GPW.pronounceable(len, rand);
+				if (g.length != len)
+					continue; // sigh
+				dump(g);
 			}
 		}
 		refresh();

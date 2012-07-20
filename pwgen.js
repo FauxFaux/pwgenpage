@@ -19,7 +19,9 @@ PWGen.prototype = {
         this.includeCapitalLetter = true;
         this.includeNumber = true;
     },
-
+    rand: function() {
+        return Math.random();
+    },
     generate0: function() {
         var result = "";
         var prev = 0;
@@ -34,10 +36,10 @@ PWGen.prototype = {
             requested |= this.INCLUDE_NUMBER;
         }
         
-        var shouldBe = (Math.random() < 0.5) ? this.VOWEL : this.CONSONANT;
+        var shouldBe = (rand() < 0.5) ? this.VOWEL : this.CONSONANT;
         
         while (result.length < this.maxLength) {
-            i = Math.floor((this.ELEMENTS.length - 1) * Math.random());
+            i = Math.floor((this.ELEMENTS.length - 1) * rand());
             str = this.ELEMENTS[i][0];
             flags = this.ELEMENTS[i][1];
 
@@ -57,7 +59,7 @@ PWGen.prototype = {
             
             if (requested & this.INCLUDE_CAPITAL_LETTER) {
                 if ((isFirst || (flags & this.CONSONANT)) &&
-                    (Math.random() > 0.3)) {
+                    (rand() > 0.3)) {
                     str = str.slice(0, 1).toUpperCase() + str.slice(1, str.length);
                     requested &= ~this.INCLUDE_CAPITAL_LETTER;
                 }
@@ -71,13 +73,13 @@ PWGen.prototype = {
             
             
             if (requested & this.INCLUDE_NUMBER) {
-                if (!isFirst && (Math.random() < 0.3)) {
-                    result += Math.floor(10 * Math.random()).toString();
+                if (!isFirst && (rand() < 0.3)) {
+                    result += Math.floor(10 * rand()).toString();
                     requested &= ~this.INCLUDE_NUMBER;
                     
                     isFirst = true;
                     prev = 0;
-                    shouldBe = (Math.random() < 0.5) ? this.VOWEL : this.CONSONANT;
+                    shouldBe = (rand() < 0.5) ? this.VOWEL : this.CONSONANT;
                     continue;
                 }
             }
@@ -89,7 +91,7 @@ PWGen.prototype = {
                 shouldBe = this.VOWEL;
             } else { /* should_be == VOWEL */
                 if ((prev & this.VOWEL) ||
-                    (flags & this.DIPTHONG) || (Math.random() > 0.3)) {
+                    (flags & this.DIPTHONG) || (rand() > 0.3)) {
                     shouldBe = this.CONSONANT;
                 } else {
                     shouldBe = this.VOWEL;

@@ -18,7 +18,8 @@ var GPW = {
  * var pw = GPW.pronounceable(10);
  */
 
-pronounceable : function (pwl) {
+pronounceable : function (pwl, rand) {
+	rand = rand || function() { return Math.random(); }
 	var output = "";
 	var c1, c2, c3;
 	var sum = 0;
@@ -709,7 +710,7 @@ var _trigram = [[ /* [26][26][26] */
 /* Z Z */ [7,0,0,0,1,0,0,0,7,0,0,17,0,0,2,0,0,0,0,0,0,0,1,0,5,0]]];
 
 	// Pick a random starting point.
-	pik = Math.random(); // random number [0,1]
+	pik = rand(); // random number [0,1]
 	ranno = pik * 125729.0;
 	sum = 0;
 	for (c1=0; c1 < 26; c1++) {
@@ -740,7 +741,7 @@ var _trigram = [[ /* [26][26][26] */
 		break;	// exit while loop
 	    }
 	    //pik = ran.nextDouble();
-	    pik = Math.random();
+	    pik = rand();
 	    ranno = pik * sum;
 	    sum = 0;
 	    for (c3=0; c3 < 26; c3++) {
